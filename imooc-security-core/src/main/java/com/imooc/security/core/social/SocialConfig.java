@@ -9,8 +9,10 @@ import org.springframework.security.crypto.encrypt.Encryptors;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurerAdapter;
 import org.springframework.social.connect.ConnectionFactoryLocator;
+import org.springframework.social.connect.ConnectionSignUp;
 import org.springframework.social.connect.UsersConnectionRepository;
 import org.springframework.social.connect.jdbc.JdbcUsersConnectionRepository;
+import org.springframework.social.connect.web.ProviderSignInUtils;
 import org.springframework.social.security.SpringSocialConfigurer;
 
 import javax.sql.DataSource;
@@ -26,11 +28,14 @@ public class SocialConfig extends SocialConfigurerAdapter {
     private DataSource dataSource;
     @Autowired
     private SecurityProperties securityProperties;
+    @Autowired
+    private ConnectionSignUp connectionSignUp;
 
     @Override
     public UsersConnectionRepository getUsersConnectionRepository(ConnectionFactoryLocator connectionFactoryLocator) {
         JdbcUsersConnectionRepository jdbcUsersConnectionRepository = new JdbcUsersConnectionRepository(dataSource, connectionFactoryLocator, Encryptors.noOpText());
         jdbcUsersConnectionRepository.setTablePrefix("imooc_");
+        jdbcUsersConnectionRepository.setConnectionSignUp(connectionSignUp);
         return jdbcUsersConnectionRepository;
     }
 
@@ -38,6 +43,16 @@ public class SocialConfig extends SocialConfigurerAdapter {
     public SpringSocialConfigurer imoocSocialSecurityConfig() {
         //return new SpringSocialConfigurer();
         String filterProcessesUrl = securityProperties.getSocial().getFilterProcessesUrl();
-        return new ImoocSpringSocialConfigurer(filterProcessesUrl);
+        ImoocSpringSocialConfigurer imoocSpringSocialConfigurer = new ImoocSpringSocialConfigurer(filterProcessesUrl);
+        String signUpUrl = securityProperties.getBrowser().getSignUpUrl();
+        imoocSpringSocialConfigurer.signupUrl(signUpUrl);
+        return imoocSpringSocialConfigurer;
+    }
+
+    @Bean
+    public ProviderSignInUtils providerSignInUtils(ConnectionFactoryLocator connectionFactoryLocator) {
+        return new ProviderSignInUtils(connectionFactoryLocator,getUsersConnectionRepository(connectionFactoryLocator)){
+
+        };
     }
 }

@@ -6,10 +6,11 @@ spring:
     password: root
   session:
     store-type: none
-#imooc:
-#  security:
-#    browser:
-##      login-page: /demo-signIn.html
+imooc:
+  security:
+    browser:
+      sign-up-url: /demo-singUp.html
+#      login-page: /demo-signIn.html
 #      login-type: JSON
 #    code:
 #      image:
@@ -19,13 +20,15 @@ spring:
 #      sms:
 #        url: /user
 #        length: 4
-imooc:
-  security:
     social:
       qq:
-        app-id: 101386962
-        app-secret: 2a0f820407df400b84a854d054be8b6a
+        app-id: 101892374
+        app-secret: 5040db8a60987cabed4ba0d30aa3c82b
         provider-id: qq
       filter-processes-url: /qqLogin
+      weixin:
+        app-id:
+        app-secret:
+
 server:
   port: 80
