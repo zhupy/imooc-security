@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/imooc-demo?useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: root
+  session:
+    store-type: none
+#imooc:
+#  security:
+#    browser:
+##      login-page: /demo-signIn.html
+#      login-type: JSON
+#    code:
+#      image:
+#        length:
+#        width: 100
+#        url: /user,/user/*
+#      sms:
+#        url: /user
+#        length: 4
+imooc:
+  security:
+    social:
+      qq:
+        app-id: 101386962
+        app-secret: 2a0f820407df400b84a854d054be8b6a
+        provider-id: qq
+      filter-processes-url: /qqLogin
+server:
+  port: 80
